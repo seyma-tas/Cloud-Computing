@@ -1,0 +1,410 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "Untitled0.ipynb",
+      "provenance": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "qGTRCBr_-liX",
+        "outputId": "0ffaf33d-0be3-4407-9798-7d9f4bfaf0a9"
+      },
+      "source": [
+        "!pip install azureml.core"
+      ],
+      "execution_count": 5,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Collecting azureml.core\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/a8/5a/7c7972ee9186c344611bc3acc1a0618438cebac2a85e4420400edd88d710/azureml_core-1.24.0.post2-py3-none-any.whl (2.2MB)\n",
+            "\u001b[K     |████████████████████████████████| 2.2MB 6.7MB/s \n",
+            "\u001b[?25hCollecting msrestazure>=0.4.33\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/5e/3a/7adb08fd2f0ee6fdfd03685fac38477b64f184943dcf6ea0cbffb205f22d/msrestazure-0.6.4-py2.py3-none-any.whl (40kB)\n",
+            "\u001b[K     |████████████████████████████████| 40kB 5.3MB/s \n",
+            "\u001b[?25hRequirement already satisfied: pytz in /usr/local/lib/python3.7/dist-packages (from azureml.core) (2018.9)\n",
+            "Collecting cryptography!=1.9,!=2.0.*,!=2.1.*,!=2.2.*,<4.0.0\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/f8/1f/acde6ff69864c5e78b56488e3afd93c1ccc8c2651186e2a5f93d93f64859/cryptography-3.4.6-cp36-abi3-manylinux2014_x86_64.whl (3.2MB)\n",
+            "\u001b[K     |████████████████████████████████| 3.2MB 22.3MB/s \n",
+            "\u001b[?25hCollecting azure-mgmt-authorization<1.0.0,>=0.40.0\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/b4/50/7a923f58bf053280fe1890f3332c08f6a82a208c92035ad8f7888c87b786/azure_mgmt_authorization-0.61.0-py2.py3-none-any.whl (94kB)\n",
+            "\u001b[K     |████████████████████████████████| 102kB 10.5MB/s \n",
+            "\u001b[?25hCollecting docker\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/c4/22/410313ad554477e87ec406d38d85f810e61ddb0d2fc44e64994857476de9/docker-4.4.4-py2.py3-none-any.whl (147kB)\n",
+            "\u001b[K     |████████████████████████████████| 153kB 42.0MB/s \n",
+            "\u001b[?25hCollecting PyJWT<3.0.0\n",
+            "  Downloading https://files.pythonhosted.org/packages/b4/9b/8850f99027ed029af6828199cc87179eaccbbf1f9e6e373e7f0177d32dad/PyJWT-2.0.1-py3-none-any.whl\n",
+            "Collecting azure-mgmt-containerregistry>=2.0.0\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/97/70/8c2d0509db466678eba16fa2b0a539499f3b351b1f2993126ad843d5be13/azure_mgmt_containerregistry-2.8.0-py2.py3-none-any.whl (718kB)\n",
+            "\u001b[K     |████████████████████████████████| 727kB 39.2MB/s \n",
+            "\u001b[?25hCollecting adal>=1.2.0\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/61/a1/5f5fb9f4edb6e8b7882281158edc1cd465249c53fd48b1bf6af2c9237fe5/adal-1.2.6-py2.py3-none-any.whl (55kB)\n",
+            "\u001b[K     |████████████████████████████████| 61kB 7.8MB/s \n",
+            "\u001b[?25hCollecting ndg-httpsclient\n",
+            "  Downloading https://files.pythonhosted.org/packages/fb/67/c2f508c00ed2a6911541494504b7cac16fe0b0473912568df65fd1801132/ndg_httpsclient-0.5.1-py3-none-any.whl\n",
+            "Requirement already satisfied: contextlib2 in /usr/local/lib/python3.7/dist-packages (from azureml.core) (0.5.5)\n",
+            "Collecting azure-mgmt-resource<15.0.0,>=1.2.1\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/55/f6/7db7f9f144cac5924dbd6a8bcba2bac872dfbf3137b83c41a0ea136b3449/azure_mgmt_resource-12.1.0-py2.py3-none-any.whl (1.1MB)\n",
+            "\u001b[K     |████████████████████████████████| 1.1MB 40.6MB/s \n",
+            "\u001b[?25hCollecting pathspec\n",
+            "  Downloading https://files.pythonhosted.org/packages/29/29/a465741a3d97ea3c17d21eaad4c64205428bde56742360876c4391f930d4/pathspec-0.8.1-py2.py3-none-any.whl\n",
+            "Collecting azure-common>=1.1.12\n",
+            "  Downloading https://files.pythonhosted.org/packages/19/2b/46ada1753c4a640bc3ad04a1e20b1a5ea52a8f18079e1b8238e536aa0c98/azure_common-1.1.26-py2.py3-none-any.whl\n",
+            "Collecting SecretStorage\n",
+            "  Downloading https://files.pythonhosted.org/packages/d9/1e/29cd69fdac7391aa51510dfd42aa70b4e6a826c8cd019ee2a8ab9ec0777f/SecretStorage-3.3.1-py3-none-any.whl\n",
+            "Collecting ruamel.yaml>=0.15.35\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/ed/c3/4c823dac2949a6baf36a4987d04c50d30184147393ba6f4bfb4c67d15a13/ruamel.yaml-0.16.13-py2.py3-none-any.whl (111kB)\n",
+            "\u001b[K     |████████████████████████████████| 112kB 40.0MB/s \n",
+            "\u001b[?25hCollecting jmespath\n",
+            "  Downloading https://files.pythonhosted.org/packages/07/cb/5f001272b6faeb23c1c9e0acc04d48eaaf5c862c17709d20e3469c6e0139/jmespath-0.10.0-py2.py3-none-any.whl\n",
+            "Collecting azure-mgmt-keyvault<7.0.0,>=0.40.0\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/f1/af/1ba15e7176bcf6b1531b453e410ae41a983c09f834d8700dfce739451b53/azure_mgmt_keyvault-2.2.0-py2.py3-none-any.whl (89kB)\n",
+            "\u001b[K     |████████████████████████████████| 92kB 9.9MB/s \n",
+            "\u001b[?25hCollecting azure-graphrbac<1.0.0,>=0.40.0\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/3e/93/02056aca45162f9fc275d1eaad12a2a07ef92375afb48eabddc4134b8315/azure_graphrbac-0.61.1-py2.py3-none-any.whl (141kB)\n",
+            "\u001b[K     |████████████████████████████████| 143kB 38.3MB/s \n",
+            "\u001b[?25hCollecting msrest>=0.5.1\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/e8/cc/6c96bfb3d3cf4c3bdedfa6b46503223f4c2a4fa388377697e0f8082a4fed/msrest-0.6.21-py2.py3-none-any.whl (85kB)\n",
+            "\u001b[K     |████████████████████████████████| 92kB 9.9MB/s \n",
+            "\u001b[?25hCollecting azure-mgmt-storage<16.0.0,>=1.5.0\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/33/cc/8ace313fd151af6663b1e1778f216532eab0258133ef21498c0e2caefad6/azure_mgmt_storage-11.2.0-py2.py3-none-any.whl (547kB)\n",
+            "\u001b[K     |████████████████████████████████| 552kB 42.4MB/s \n",
+            "\u001b[?25hCollecting pyopenssl<21.0.0\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/b2/5e/06351ede29fd4899782ad335c2e02f1f862a887c20a3541f17c3fa1a3525/pyOpenSSL-20.0.1-py2.py3-none-any.whl (54kB)\n",
+            "\u001b[K     |████████████████████████████████| 61kB 7.4MB/s \n",
+            "\u001b[?25hCollecting backports.tempfile\n",
+            "  Downloading https://files.pythonhosted.org/packages/b4/5c/077f910632476281428fe254807952eb47ca78e720d059a46178c541e669/backports.tempfile-1.0-py2.py3-none-any.whl\n",
+            "Requirement already satisfied: requests<3.0.0,>=2.19.1 in /usr/local/lib/python3.7/dist-packages (from azureml.core) (2.23.0)\n",
+            "Requirement already satisfied: urllib3>=1.23 in /usr/local/lib/python3.7/dist-packages (from azureml.core) (1.24.3)\n",
+            "Requirement already satisfied: python-dateutil>=2.7.3 in /usr/local/lib/python3.7/dist-packages (from azureml.core) (2.8.1)\n",
+            "Collecting jsonpickle\n",
+            "  Downloading https://files.pythonhosted.org/packages/bb/1a/f2db026d4d682303793559f1c2bb425ba3ec0d6fd7ac63397790443f2461/jsonpickle-2.0.0-py2.py3-none-any.whl\n",
+            "Requirement already satisfied: six in /usr/local/lib/python3.7/dist-packages (from msrestazure>=0.4.33->azureml.core) (1.15.0)\n",
+            "Requirement already satisfied: cffi>=1.12 in /usr/local/lib/python3.7/dist-packages (from cryptography!=1.9,!=2.0.*,!=2.1.*,!=2.2.*,<4.0.0->azureml.core) (1.14.5)\n",
+            "Collecting websocket-client>=0.32.0\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/08/33/80e0d4f60e84a1ddd9a03f340be1065a2a363c47ce65c4bd3bae65ce9631/websocket_client-0.58.0-py2.py3-none-any.whl (61kB)\n",
+            "\u001b[K     |████████████████████████████████| 61kB 7.6MB/s \n",
+            "\u001b[?25hRequirement already satisfied: pyasn1>=0.1.1 in /usr/local/lib/python3.7/dist-packages (from ndg-httpsclient->azureml.core) (0.4.8)\n",
+            "Collecting jeepney>=0.6\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/51/b0/a6ea72741aaac3f37fb96d195e4ee576a103c4c04e279bc6b446a70960e1/jeepney-0.6.0-py3-none-any.whl (45kB)\n",
+            "\u001b[K     |████████████████████████████████| 51kB 6.4MB/s \n",
+            "\u001b[?25hCollecting ruamel.yaml.clib>=0.1.2; platform_python_implementation == \"CPython\" and python_version < \"3.10\"\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/5e/6e/f652c56bbb2c3d3fca252ffc7c0358597f57a1bbdf484dac683054950c63/ruamel.yaml.clib-0.2.2-cp37-cp37m-manylinux1_x86_64.whl (547kB)\n",
+            "\u001b[K     |████████████████████████████████| 552kB 38.4MB/s \n",
+            "\u001b[?25hCollecting isodate>=0.6.0\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/9b/9f/b36f7774ff5ea8e428fdcfc4bb332c39ee5b9362ddd3d40d9516a55221b2/isodate-0.6.0-py2.py3-none-any.whl (45kB)\n",
+            "\u001b[K     |████████████████████████████████| 51kB 6.1MB/s \n",
+            "\u001b[?25hRequirement already satisfied: requests-oauthlib>=0.5.0 in /usr/local/lib/python3.7/dist-packages (from msrest>=0.5.1->azureml.core) (1.3.0)\n",
+            "Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.7/dist-packages (from msrest>=0.5.1->azureml.core) (2020.12.5)\n",
+            "Collecting backports.weakref\n",
+            "  Downloading https://files.pythonhosted.org/packages/88/ec/f598b633c3d5ffe267aaada57d961c94fdfa183c5c3ebda2b6d151943db6/backports.weakref-1.0.post1-py2.py3-none-any.whl\n",
+            "Requirement already satisfied: idna<3,>=2.5 in /usr/local/lib/python3.7/dist-packages (from requests<3.0.0,>=2.19.1->azureml.core) (2.10)\n",
+            "Requirement already satisfied: chardet<4,>=3.0.2 in /usr/local/lib/python3.7/dist-packages (from requests<3.0.0,>=2.19.1->azureml.core) (3.0.4)\n",
+            "Requirement already satisfied: importlib-metadata; python_version < \"3.8\" in /usr/local/lib/python3.7/dist-packages (from jsonpickle->azureml.core) (3.7.2)\n",
+            "Requirement already satisfied: pycparser in /usr/local/lib/python3.7/dist-packages (from cffi>=1.12->cryptography!=1.9,!=2.0.*,!=2.1.*,!=2.2.*,<4.0.0->azureml.core) (2.20)\n",
+            "Requirement already satisfied: oauthlib>=3.0.0 in /usr/local/lib/python3.7/dist-packages (from requests-oauthlib>=0.5.0->msrest>=0.5.1->azureml.core) (3.1.0)\n",
+            "Requirement already satisfied: zipp>=0.5 in /usr/local/lib/python3.7/dist-packages (from importlib-metadata; python_version < \"3.8\"->jsonpickle->azureml.core) (3.4.1)\n",
+            "Requirement already satisfied: typing-extensions>=3.6.4; python_version < \"3.8\" in /usr/local/lib/python3.7/dist-packages (from importlib-metadata; python_version < \"3.8\"->jsonpickle->azureml.core) (3.7.4.3)\n",
+            "Installing collected packages: isodate, msrest, cryptography, PyJWT, adal, msrestazure, azure-common, azure-mgmt-authorization, websocket-client, docker, azure-mgmt-containerregistry, pyopenssl, ndg-httpsclient, azure-mgmt-resource, pathspec, jeepney, SecretStorage, ruamel.yaml.clib, ruamel.yaml, jmespath, azure-mgmt-keyvault, azure-graphrbac, azure-mgmt-storage, backports.weakref, backports.tempfile, jsonpickle, azureml.core\n",
+            "Successfully installed PyJWT-2.0.1 SecretStorage-3.3.1 adal-1.2.6 azure-common-1.1.26 azure-graphrbac-0.61.1 azure-mgmt-authorization-0.61.0 azure-mgmt-containerregistry-2.8.0 azure-mgmt-keyvault-2.2.0 azure-mgmt-resource-12.1.0 azure-mgmt-storage-11.2.0 azureml.core backports.tempfile-1.0 backports.weakref-1.0.post1 cryptography-3.4.6 docker-4.4.4 isodate-0.6.0 jeepney-0.6.0 jmespath-0.10.0 jsonpickle-2.0.0 msrest-0.6.21 msrestazure-0.6.4 ndg-httpsclient-0.5.1 pathspec-0.8.1 pyopenssl-20.0.1 ruamel.yaml-0.16.13 ruamel.yaml.clib-0.2.2 websocket-client-0.58.0\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "rOWdzrR7-bmX",
+        "outputId": "9c46946f-aaee-487b-95f6-020ad4f50e4d"
+      },
+      "source": [
+        "%matplotlib inline\n",
+        "import numpy as np\n",
+        "import matplotlib\n",
+        "import matplotlib.pyplot as plt\n",
+        "\n",
+        "import azureml\n",
+        "from azureml.core import Workspace, Run\n",
+        "\n",
+        "# display the core SDK version number\n",
+        "print(\"Azure ML SDK Version: \", azureml.core.VERSION)"
+      ],
+      "execution_count": 6,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Azure ML SDK Version:  1.24.0\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 538
+        },
+        "id": "g0V23izD-iKJ",
+        "outputId": "d4457a51-fc86-4c89-de7a-184838d6c9e6"
+      },
+      "source": [
+        "from azureml.core import Workspace\n",
+        "from azureml.core.model import Model\n",
+        "\n",
+        "ws = Workspace.from_config()\n",
+        "model=Model(ws, 'keras_dl_fashion_test')\n",
+        "model.download(target_dir = '.', exist_ok = 'True')\n",
+        "import os \n",
+        "# verify the downloaded model file\n",
+        "os.stat('model.h5')"
+      ],
+      "execution_count": 7,
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "UserErrorException",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mUserErrorException\u001b[0m                        Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-7-3da6f249c3ff>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m()\u001b[0m\n\u001b[1;32m      2\u001b[0m \u001b[0;32mfrom\u001b[0m \u001b[0mazureml\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcore\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mmodel\u001b[0m \u001b[0;32mimport\u001b[0m \u001b[0mModel\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      3\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 4\u001b[0;31m \u001b[0mws\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mWorkspace\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mfrom_config\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      5\u001b[0m \u001b[0mmodel\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mModel\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mws\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m'keras_dl_fashion_test'\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      6\u001b[0m \u001b[0mmodel\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdownload\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtarget_dir\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m'.'\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mexist_ok\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m'True'\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.7/dist-packages/azureml/core/workspace.py\u001b[0m in \u001b[0;36mfrom_config\u001b[0;34m(path, auth, _logger, _file_name)\u001b[0m\n\u001b[1;32m    280\u001b[0m                     \u001b[0;34m'We could not find config.json in: {} or in its parent directories. '\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    281\u001b[0m                     \u001b[0;34m'Please provide the full path to the config file or ensure that '\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 282\u001b[0;31m                     'config.json exists in the parent directories.'.format(normalized_path))\n\u001b[0m\u001b[1;32m    283\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    284\u001b[0m         subscription_id, resource_group, workspace_name = project_info.get_workspace_info(\n",
+            "\u001b[0;31mUserErrorException\u001b[0m: UserErrorException:\n\tMessage: We could not find config.json in: /content or in its parent directories. Please provide the full path to the config file or ensure that config.json exists in the parent directories.\n\tInnerException None\n\tErrorResponse \n{\n    \"error\": {\n        \"code\": \"UserError\",\n        \"message\": \"We could not find config.json in: /content or in its parent directories. Please provide the full path to the config file or ensure that config.json exists in the parent directories.\"\n    }\n}"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "s7MJT-Y8-i-9"
+      },
+      "source": [
+        "import tensorflow as tf\n",
+        "import os\n",
+        "import time\n",
+        "os.environ[\"TF_CPP_MIN_LOG_LEVEL\"]= \"2\"\n",
+        "print(\"tensorflow Version is: \" + str(tf.__version__))\n",
+        "\n",
+        "import numpy as np\n",
+        "os.environ['KERAS_BACKEND'] = 'tensorflow'\n",
+        "from keras import backend as K\n",
+        "print(os.environ['KERAS_BACKEND'])\n",
+        "\n",
+        "#Fashion MNIST Dataset CNN model development: https://github.com/zalandoresearch/fashion-mnist\n",
+        "from keras.datasets import fashion_mnist\n",
+        "from keras.models import Sequential\n",
+        "from keras.layers import Dense, Dropout, Flatten\n",
+        "from keras.layers import Conv2D, MaxPooling2D\n",
+        "from keras import utils, losses, optimizers\n",
+        "import matplotlib.pyplot as plt\n",
+        "from utils import load_data\n",
+        "\n",
+        "(x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()\n",
+        "\n",
+        "#no. of classes\n",
+        "num_classes = 10\n",
+        "# Define the text labels\n",
+        "fashion_mnist_labels = [\"Top\",          # index 0\n",
+        "                        \"Trouser\",      # index 1\n",
+        "                        \"Jumper\",       # index 2 \n",
+        "                        \"Dress\",        # index 3 \n",
+        "                        \"Coat\",         # index 4\n",
+        "                        \"Sandal\",       # index 5\n",
+        "                        \"Shirt\",        # index 6 \n",
+        "                        \"Trainer\",      # index 7 \n",
+        "                        \"Bag\",          # index 8 \n",
+        "                        \"Ankle boot\"]   # index 9\n",
+        "\n",
+        "x_test = x_test.astype('float32')\n",
+        "x_test /= 255\n",
+        "y_test = utils.to_categorical(y_test,  num_classes)\n",
+        "\n",
+        "#X_test = load_data('./data/test-images.gz', False) / 255.0\n",
+        "#y_test = load_data('./data/test-labels.gz', True).reshape(-1)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "LNP8LeU6_CPb"
+      },
+      "source": [
+        "%%writefile score.py\n",
+        "import keras as K\n",
+        "from azureml.core.model import Model\n",
+        "from keras.models import Sequential\n",
+        "from keras.models import load_model\n",
+        "import h5py\n",
+        "import sys\n",
+        "import os\n",
+        "import numpy as np\n",
+        "import json\n",
+        "\n",
+        "def init():\n",
+        "    global model\n",
+        "    print(\"Python version: \" + str(sys.version) + \", keras version: \" + K.__version__)\n",
+        "    print(\"Executing init() method...\")\n",
+        "    model_path = Model.get_model_path('model.h5')\n",
+        "    print(\"got model...\")\n",
+        "    model = K.models.load_model(model_path)\n",
+        "    print(\"loaded model...\")\n",
+        "\n",
+        "def run(raw_data):\n",
+        "    print(\"Executing run(raw_data) method...\")\n",
+        "    data = np.array(json.loads(raw_data)['data'])\n",
+        "    data = np.reshape(data, (30,28,28,1))\n",
+        "    y_hat = model.predict(data)\n",
+        "    print(\"Eexcuted predictions...\")\n",
+        "    return json.dumps(y_hat.tolist())"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "npw0RyIT_GGC"
+      },
+      "source": [
+        "from azureml.core.conda_dependencies import CondaDependencies \n",
+        "\n",
+        "myenv = CondaDependencies()\n",
+        "myenv.add_conda_package(\"scikit-learn\")\n",
+        "myenv.add_conda_package(\"keras\")\n",
+        "myenv.add_tensorflow_pip_package(core_type='cpu', version='1.11.0')\n",
+        "\n",
+        "with open(\"myenv.yml\",\"w\") as f:\n",
+        "    f.write(myenv.serialize_to_string())"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "2gBJ0Ym7_KhC"
+      },
+      "source": [
+        "with open(\"myenv.yml\",\"r\") as f:\n",
+        "    print(f.read())"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "M_PG-Esb_Qdc"
+      },
+      "source": [
+        "from azureml.core.webservice import AciWebservice\n",
+        "\n",
+        "aciconfig = AciWebservice.deploy_configuration(cpu_cores=1, \n",
+        "                                               memory_gb=1, \n",
+        "                                               tags={\"data\": \"fashion-MNIST\",  \"method\" : \"keras\"}, \n",
+        "                                               description='Deep Learning to classify fashion clothing items, using Keras')"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "y91hLF2F_Tot"
+      },
+      "source": [
+        "%%time\n",
+        "from azureml.core.webservice import Webservice\n",
+        "from azureml.core.image import ContainerImage\n",
+        "\n",
+        "image_config = ContainerImage.image_configuration(execution_script = \"score.py\",\n",
+        "                                                  runtime = \"python\",\n",
+        "                                                  conda_file = \"myenv.yml\",\n",
+        "                                                  description = \"Deep Learning to classify fashion clothing items, using Keras\",\n",
+        "                                                  tags = {\"data\": \"fashionmnist\", \"type\": \"classification\"}\n",
+        "                                                 )\n",
+        "\n",
+        "#the service name must not already exist in your workspace, else rename it \n",
+        "service_name = 'deployfashion'\n",
+        "service = Webservice.deploy(deployment_config = aciconfig,\n",
+        "                                image_config = image_config,\n",
+        "                                model_paths = ['model.h5'],\n",
+        "                                name = service_name,\n",
+        "                                workspace = ws)\n",
+        "\n",
+        "service.wait_for_deployment(show_output = True)\n",
+        "print(service.state)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "d8J98aXx_Wgt"
+      },
+      "source": [
+        "print(service.scoring_uri)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "_WnZ4lDo_ZPs"
+      },
+      "source": [
+        "import json\n",
+        "s = 100\n",
+        "e = s + 30\n",
+        "\n",
+        "#sample_indices = (x_test[0:n])\n",
+        "\n",
+        "test_samples = json.dumps({\"data\": x_test[s:e].tolist()})\n",
+        "test_samples = bytes(test_samples, encoding = 'utf8')\n",
+        "\n",
+        "test_labels = y_test[s:e]\n",
+        "\n",
+        "##testing input correct\n",
+        "body = np.array(json.loads(test_samples)['data'])\n",
+        "\n",
+        "# predict using the deployed model\n",
+        "result = json.loads(service.run(input_data=test_samples))\n",
+        "\n",
+        "for i in range(0, len(result)):\n",
+        "    indice_prediction = np.argmax(result[i])\n",
+        "    indice_label = np.argmax(test_labels[i])\n",
+        "    if indice_prediction == indice_label:\n",
+        "        print(\"correct prediction for sample \" + str(i))\n",
+        "    else:\n",
+        "        print(\"INCORRECT prediction for sample\" + str(i))"
+      ],
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
